@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cs3500.pa05.controller.PasswordEncoder;
 import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a week in the bullet journal
@@ -193,8 +191,9 @@ public class Week {
   }
 
   /**
+   * Collects a task list for the current week and sorts it so that completed tasks are on top in alphabetical order
    *
-   * @return task list for the current week
+   * @return sorted task list for the current week
    */
   @JsonIgnore
   public ArrayList<Task> getTaskList() {
@@ -206,6 +205,25 @@ public class Week {
         }
       }
     }
+
+    Collections.sort(taskList, new Comparator<Task>() {
+      @Override
+      public int compare(Task t1, Task t2) {
+        if(t1.getComplete()) {
+          if(t2.getComplete()) {
+            return t1.getName().compareTo(t2.getName());
+          } else {
+            return -1;
+          }
+        } else {
+          if(t2.getComplete()) {
+            return 1;
+          } else {
+            return t1.getName().compareTo(t2.getName());
+          }
+        }
+      }
+    });
     return taskList;
   }
 
