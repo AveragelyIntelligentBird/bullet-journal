@@ -14,8 +14,8 @@ checkstyle {
 }
 
 application {
-    mainModule = 'cs3500.pa05'
-    mainClass = 'cs3500.pa05.Driver'
+    mainModule = 'bujo'
+    mainClass = 'bujo.Driver'
 }
 
 // JaCoCo for code coverage
@@ -26,7 +26,7 @@ jacocoTestReport {
     dependsOn test // make sure that test task run before reports are run.
 }
 
-group 'cs3500.pa05'
+group 'bujo'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -93,7 +93,7 @@ tasks.register('fatJar', Jar) {
     destinationDirectory.set(file("$buildDir/fatJar"))
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': 'cs3500.pa05.Driver'
+        attributes 'Main-Class': 'bujo.Driver'
     }
     dependencies {
         implementation 'org.openjfx:javafx-controls:20.0.1'

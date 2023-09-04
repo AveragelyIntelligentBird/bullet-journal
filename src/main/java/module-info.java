@@ -1,4 +1,4 @@
-module cs3500.pa05 {
+module bujo {
   requires javafx.controls;
   requires javafx.fxml;
   requires com.fasterxml.jackson.annotation;
@@ -9,13 +9,13 @@ module cs3500.pa05 {
   requires java.desktop;
   requires java.base;
 
-  opens cs3500.pa05 to javafx.fxml, javafx.media;
-  exports cs3500.pa05;
-  exports cs3500.pa05.controller;
-  exports cs3500.pa05.model;
-  exports cs3500.pa05.view;
-  opens cs3500.pa05.controller to javafx.fxml;
-  opens cs3500.pa05.model to com.fasterxml.jackson.databind;
-  opens cs3500.pa05.controller.screenctrls to javafx.fxml;
+  opens bujo to javafx.fxml, javafx.media;
+  exports bujo;
+  exports bujo.controller;
+  exports bujo.model;
+  exports bujo.view;
+  opens bujo.controller to javafx.fxml;
+  opens bujo.model to com.fasterxml.jackson.databind;
+  opens bujo.controller.screenctrls to javafx.fxml;
 
 }
