@@ -1,13 +1,22 @@
-# 3500 PA05 "Winston Ate My Bullet Journal" 
-Version 1.0.0
+# BUJO The Bullet Journal
+### Version 1.1
 
-This is a simple Bullet Journal application. It allows viewing and editing of a weekly agenda,
-along with the ability to create events and tasks. It also has a taskbar that allows for quick
-creation of tasks and events. You can also save the week in a .bujo file, which can be read later.
-The application will also warn you if you have overcommitment, and allows the setting of maximum event and
-task commitments for any given day. This program also implements keyboard shortcuts, hyperlink support,
-a progress bar, and the ability to open tasks or events in a separate viewer. The week file can also be 
-password-protected, and the password is hashed, so it can't be directly read from the file.
+This is a simple Bullet Journal application. It allows the users to create and edit
+.bujo files, where each file holds a summary of a specific week's agenda. 
+The app allows creating tasks and events, as well as editing and deleting the items 
+already created. The main week view also provides a summary of all tasks within the week 
+and a progress bar. The app also allows setting limits on how many tasks and events can be
+scheduled within a specific day, notifying the user when they seem to be overbooked. Additionally,
+the app implements keyboard shortcuts, hyperlink support in task and event descriptions, and optional
+hashed password protection of .bujo files. Finally, the app plays a relaxing background music which
+is meant to encourage concentration when journaling, but it may be turned off at any point with a 
+keyboard shortcut.
+
+The project was initially completed as a part of CS3500 Object Oriented Design for the final PA05
+in the Team "Winston Ate My Bullet Journal" with two other developers: 
+[mlow102](https://github.com/mlow102), [totokang](https://github.com/totokang). 
+This is a slightly polished version of our group effort, where I was responsible for
+the Controller and the View.
 
 ## Keyboard Shortcuts:
 - `ctrl + s` to save
@@ -21,8 +30,10 @@ password-protected, and the password is hashed, so it can't be directly read fro
 
 ## Jar File
 [Jar File](JournalApp.jar)
-**Note:** At time of writing, this jar file runs only when executed from the command line, as `java -jar JournalApp.jar`
-This is consistent with the `Server.jar` from PA04 on the machine tested. 
+
+## Mock Weeks
+Mock week file is provided in [mock-weeks](mock-weeks), it can be opened from a welcome screen 
+upon app start up. The password is "123".
 
 ## SOLID Principles
 
@@ -59,7 +70,7 @@ This program implements the Dependency Inversion Principle, by abstracting the h
 For instance, the top level controller primarily delegates responsibility to the lower-level controllers.
 
 
-# GUI:
+## GUI:
 ![Wireframe](Wireframe.png)
 
 [PA Write Up](https://markefontenot.notion.site/PA-05-8263d28a81a7473d8372c6579abd6481)
