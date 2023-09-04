@@ -199,15 +199,21 @@
                               <content>
                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="214.0">
                                     <children>
-                                       <TextFlow fx:id="eventDescriptionView" prefHeight="134.0" prefWidth="214.0" />
+                                       <TextFlow fx:id="eventDescriptionView" prefHeight="134.0" prefWidth="214.0">
+                                          <padding>
+                                             <Insets left="5.0" />
+                                          </padding></TextFlow>
                                     </children>
                                  </AnchorPane>
                               </content>
                            </ScrollPane>
-                           <TextArea fx:id="eventDescriptionField" prefHeight="127.0" prefWidth="200.0" wrapText="true">
+                           <TextArea fx:id="eventDescriptionField" disable="true" prefHeight="127.0" prefWidth="200.0" wrapText="true">
                               <font>
                                  <Font name="Niramit Regular" size="13.0" />
                               </font>
+                              <StackPane.margin>
+                                 <Insets />
+                              </StackPane.margin>
                            </TextArea>
                         </children>
                         <GridPane.margin>

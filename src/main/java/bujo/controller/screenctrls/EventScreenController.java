@@ -197,7 +197,7 @@ public class EventScreenController implements ScreenController {
         this.startTimeView.setText(event.getStartTime());
         this.eventDurationView.setText(event.getDuration());
         if (event.getDescription().isEmpty()) {
-          Text text = new Text(" ---");
+          Text text = new Text("---");
           text.setFont(Font.font("Niramit Regular", 15));
           this.eventDescriptionView.getChildren().add(text);
         } else {
@@ -227,6 +227,7 @@ public class EventScreenController implements ScreenController {
         this.eventDurationHour.setText(Integer.toString(parsedDuration[0]));
         this.eventDurationMinutes.setText(Integer.toString(parsedDuration[1]));
         this.eventDescriptionField.setText(event.getDescription());
+        this.eventDescriptionField.setDisable(false);
       }
     } catch (IllegalStateException ignored) {
       // Ignore
@@ -253,100 +254,99 @@ public class EventScreenController implements ScreenController {
    * Handles the save button
    */
   private void handleSave() {
-    // Create a new Task with the specified fields
-    String day = this.eventDayMenu.getText();
-    DayOfWeek dayEnum = switch (day) {
-      case "Monday" -> DayOfWeek.MONDAY;
-      case "Tuesday" -> DayOfWeek.TUESDAY;
-      case "Wednesday" -> DayOfWeek.WEDNESDAY;
-      case "Thursday" -> DayOfWeek.THURSDAY;
-      case "Friday" -> DayOfWeek.FRIDAY;
-      case "Saturday" -> DayOfWeek.SATURDAY;
-      case "Sunday" -> DayOfWeek.SUNDAY;
-      default -> null;
-    };
-
-    if (!(amPmSelector.getText().equals("AM") || amPmSelector.getText().equals("PM"))) {
-      raisePopup("Error - Invalid Input",
-          "Please select AM or PM for the start time.");
+    if (isInViewMode) {
+      this.primaryStage.close();
       return;
     }
 
-    if (dayEnum == null) {
-      raisePopup("Error - Invalid Input", "Please select a day of the week.");
-      return;
-    }
-
-    if (this.eventNameField.getText().equals("")) {
+    // Now, checking edit mode input validity
+    // Create a new Event with the specified fields
+    String eventName;
+    if (!this.eventNameField.getText().equals("")) {
+      eventName = this.eventNameField.getText();
+    } else {
       raisePopup("Error - Invalid Input", "Please enter an event name.");
       return;
     }
 
-    int hour;
-    int minute;
+    DayOfWeek dayEnum;
     try {
-      hour = Integer.parseInt(this.eventTimeHour.getText());
-      minute = Integer.parseInt(this.eventTimeMinutes.getText());
+      dayEnum = DayOfWeek.valueOf(this.eventDayMenu.getText().toUpperCase());
+    } catch (Exception e) {
+      raisePopup("Error - Invalid Input", "Please select a day of the week.");
+      return;
+    }
+
+    int startHour;
+    int startMinute;
+    try {
+      startHour = Integer.parseInt(this.eventTimeHour.getText());
+      startMinute = Integer.parseInt(this.eventTimeMinutes.getText());
+
+      if ((startHour > 12 || startHour < 1) || (startMinute < 0 || startMinute > 59)) {
+        raisePopup("Error - Invalid Input", "Please enter a valid start time.");
+        return;
+      }
     } catch (NumberFormatException e) {
       raisePopup("Error - Invalid Input", "Please enter a valid start time.");
       return;
     }
 
-    if ((this.eventTimeHour.getText().equals("") && this.eventTimeMinutes.getText().equals(""))
-        || (hour > 12 || hour < 1) || (minute > 59)) {
-      raisePopup("Error - Invalid Input", "Please enter a valid start time.");
+    String selectedAmPm;
+    if (amPmSelector.getText().equals("AM") || amPmSelector.getText().equals("PM")) {
+      selectedAmPm = amPmSelector.getText();
+    } else {
+      raisePopup("Error - Invalid Input",
+              "Please select AM or PM for the start time.");
       return;
     }
 
-    if (!this.eventDurationHour.getText().equals("")) {
-      try {
-        hour = Integer.parseInt(this.eventDurationHour.getText());
-      } catch (NumberFormatException e) {
-        raisePopup("Error - Invalid Input", "Please enter a valid duration.");
-        return;
-      }
-
-      if (hour < 0 || hour > 12) {
-        raisePopup("Error - Invalid Input", "Please enter a duration.");
-        return;
-      }
-    }
-
-    if (!this.eventDurationMinutes.getText().equals("")) {
-      try {
-        minute = Integer.parseInt(this.eventDurationMinutes.getText());
-      } catch (NumberFormatException e) {
-        raisePopup("Error - Invalid Input", "Please enter a valid duration.");
-        return;
-      }
-
-      if (minute < 0 || minute > 59) {
-        raisePopup("Error - Invalid Input", "Please enter a duration.");
-        return;
-      }
-    }
-
-    String startTime;
-    int startTimeMins = Integer.parseInt(this.eventTimeMinutes.getText());
-    if (startTimeMins >= 10) {
-      startTime = this.eventTimeHour.getText() + ":" + startTimeMins + " " + amPmSelector.getText();
+    String formattedStartTime;
+    if (startMinute >= 10) {
+      formattedStartTime = startHour + ":" + startMinute + " " + selectedAmPm;
     } else {
-      startTime = this.eventTimeHour.getText() + ":" + "0" + startTimeMins
-          + " " + amPmSelector.getText();
+      formattedStartTime = startHour + ":0" + startMinute + " " + selectedAmPm;
     }
 
-    String duration;
-    if (this.eventDurationHour.getText().equals("")) {
-      duration = this.eventDurationMinutes.getText() + " mins";
-    } else if (this.eventDurationMinutes.getText().equals("")) {
-      duration = this.eventDurationHour.getText() + " hr";
-    } else {
-      duration = this.eventDurationHour.getText() + " hr " + this.eventDurationMinutes.getText()
-          + " mins";
+    int durHour;
+    int durMinute;
+    try {
+      if (this.eventDurationHour.getText().equals("")) {
+        durHour = 0;
+      } else {
+        durHour = Integer.parseInt(this.eventDurationHour.getText());
+      }
+
+      if (this.eventDurationMinutes.getText().equals("")) {
+        durMinute = 0;
+      } else {
+        durMinute = Integer.parseInt(this.eventDurationHour.getText());
+      }
+
+      if ((durHour == 0 && durMinute == 0) || (durHour < 0) || (durMinute < 0 || durMinute > 59)) {
+        raisePopup("Error - Invalid Input", "Please enter a valid event duration.");
+        return;
+      }
+    } catch (NumberFormatException e) {
+      raisePopup("Error - Invalid Input", "Please enter a valid event duration.");
+      return;
     }
 
-    Event event = new Event(this.eventNameField.getText(), this.eventDescriptionField.getText(),
-        dayEnum, startTime, duration, ItemType.EVENT);
+    String formattedDuration = "";
+    if (!(durHour == 0)) {
+      formattedDuration += ((durHour % 10) == 1) ? (durHour + " hr ") : (durHour + " hrs ");
+    }
+    if (!(durMinute == 0)) {
+      formattedDuration += ((durMinute % 10) == 1) ? (durMinute + " min") : (durMinute + " mins");
+    }
+
+    Event event = new Event(
+            eventName,
+            this.eventDescriptionField.getText(),
+            dayEnum,
+            formattedStartTime,
+            formattedDuration,
+            ItemType.EVENT);
 
     this.eventLockbox.putItemInLockbox(event);
     this.primaryStage.close();
@@ -362,7 +362,6 @@ public class EventScreenController implements ScreenController {
 
   /**
    * Parses a string of the form "Hr Min" into an array of ints of the form [Hr, Min]
-   * todo: be sure this works...
    *
    * @param time string to be parsed
    * @return array of ints representing the hours and minutes
