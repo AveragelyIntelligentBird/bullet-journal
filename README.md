@@ -36,7 +36,9 @@ upon app start up. The password is "123".
 
 ### Contributors
 Team "Winston Ate My Bullet Journal"
+
 [mlow102](https://github.com/mlow102) was responsible for the model and late-stage integration.
+
 [totokang](https://github.com/totokang) was responsible for the fxml layout and visual flare.
 
 ## GUI:
