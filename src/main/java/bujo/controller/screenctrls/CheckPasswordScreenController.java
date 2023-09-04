@@ -91,9 +91,6 @@ public class CheckPasswordScreenController implements ScreenController {
    * Handles login attempt
    */
   public void handleLogin() {
-    System.out.println("Read password " + passwordField.getText());
-    System.out.println("Hashed password " + week.getHashedPassword());
-
     if (week.isPasswordValid(passwordField.getText())) {
       weekLockbox.putItemInLockbox(week);
       this.popupStage.hide();

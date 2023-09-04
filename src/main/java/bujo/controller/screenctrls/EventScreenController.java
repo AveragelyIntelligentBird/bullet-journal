@@ -148,6 +148,7 @@ public class EventScreenController implements ScreenController {
     startTimeView.setVisible(isInViewMode);
     eventDurationView.setVisible(isInViewMode);
     eventDescriptionView.setVisible(isInViewMode);
+    eventDescriptionField.setDisable(isInViewMode);
 
     // Visible when in edit/create mode
     eventNameField.setVisible(!isInViewMode);
@@ -169,7 +170,6 @@ public class EventScreenController implements ScreenController {
    */
   private void handleAmPmSelection(MenuItem item) {
     this.amPmSelector.setText(item.getText());
-    System.out.println("USER SELECTED " + item.getText());
   }
 
 
@@ -227,7 +227,6 @@ public class EventScreenController implements ScreenController {
         this.eventDurationHour.setText(Integer.toString(parsedDuration[0]));
         this.eventDurationMinutes.setText(Integer.toString(parsedDuration[1]));
         this.eventDescriptionField.setText(event.getDescription());
-        this.eventDescriptionField.setDisable(false);
       }
     } catch (IllegalStateException ignored) {
       // Ignore
@@ -320,7 +319,7 @@ public class EventScreenController implements ScreenController {
       if (this.eventDurationMinutes.getText().equals("")) {
         durMinute = 0;
       } else {
-        durMinute = Integer.parseInt(this.eventDurationHour.getText());
+        durMinute = Integer.parseInt(this.eventDurationMinutes.getText());
       }
 
       if ((durHour == 0 && durMinute == 0) || (durHour < 0) || (durMinute < 0 || durMinute > 59)) {
