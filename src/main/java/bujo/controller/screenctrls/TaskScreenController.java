@@ -22,6 +22,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
+import static bujo.controller.AppUtils.raisePopup;
+
 /**
  * Represents a controller for the TaskScreen
  */
@@ -172,26 +174,34 @@ public class TaskScreenController implements ScreenController {
    * Handler for "save" option
    */
   private void handleSave() {
-    boolean inputValid = true;
+    if (isInViewMode) {
+      this.primaryStage.close();
+      return;
+    }
 
+    // Now, checking edit mode input validity
     // Create a new Task with the specified fields
-    String day = this.taskDayMenu.getText();
-    DayOfWeek dayEnum = DayOfWeek.valueOf(day.toUpperCase());
+    DayOfWeek dayEnum;
+    try {
+      dayEnum = DayOfWeek.valueOf(this.taskDayMenu.getText().toUpperCase());
+    } catch (Exception e) {
+      raisePopup("Error - Invalid Input", "Please select a day of the week.");
+      return;
+    }
 
     if (this.taskNameEditField.getText().equals("")) {
-      inputValid = false;
       AppUtils.raisePopup("Error - Invalid Input", "Please enter a task name.");
       return;
     }
 
-    Task saveTask = new Task(this.taskNameEditField.getText(),
-        this.taskDescriptionField.getText(), dayEnum);
+    Task saveTask = new Task(
+            this.taskNameEditField.getText(),
+            this.taskDescriptionField.getText(),
+            dayEnum);
 
     // Set the lockbox to the new task if the input is valid
-    if (inputValid) {
-      this.taskLockbox.putItemInLockbox(saveTask);
-      this.primaryStage.hide();
-    }
+    this.taskLockbox.putItemInLockbox(saveTask);
+    this.primaryStage.hide();
   }
 
   /**
